@@ -1,0 +1,396 @@
+;////////////////////////////////////////////////////////////////////////////////
+;//
+;//                       (C) Adaptec, Inc. 2005
+;// All rights are reserved.  Reproduction in whole or in part is prohibited
+;// without the written consent of the copyright owner.
+;//
+;// Adaptec, Inc. reserves the right to make changes without notice at any time.
+;// Adaptec, Inc. makes no warranty, expressed, implied or statutory, including
+;// but not limited to any implied warranty of merchantibility of fitness
+;// for any particular purpose, or that the use will not infringe any
+;// third party patent, copyright or trademark.
+;// Adaptec, Inc. must not be liable for any loss or damage arising from its use.
+;//
+;////////////////////////////////////////////////////////////////////////////////
+
+;////////////////////////////////////////////////////////////////////////////////
+;//
+;// avcgbdr.inf
+;//
+;// This file contains installation information for the Adaptec
+;// AVC-1410/1400 and AVC-1510/1500 USB Device.
+;//
+;////////////////////////////////////////////////////////////////////////////////
+
+[Version]
+signature="$CHICAGO$"
+Class=Media
+ClassGUID={4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider="Adaptec"
+DriverVer=10/26/2005,1.1.0.2100
+CatalogFile.ntx86=avcgbdr.cat
+
+[Manufacturer]
+"Adaptec"=Adaptec,NT.5.1
+
+[SourceDisksNames]
+1="Adaptec GameBridge AVC-14X0/15X0 Drivers",,,""
+
+[SourceDisksFiles]
+avcgbfl.sys=1
+avcgbdr.sys=1
+gbcpntfy.ax=1
+gbtvrate.dll=1
+gbclcnvt.ax=1
+gbproppg.ax=1
+makoaudb.rom=1
+makoaudc.rom=1
+msvcp80.dll=1
+msvcr80.dll=1
+gbaudmgr.ax=1
+
+[Adaptec]
+%GameBridge_1400.DeviceDesc%=GameBridge,  USB\VID_03F3&PID_009A		;AVC-1400/1500
+%GameBridge_1410.DeviceDesc%=GameBridge,  USB\VID_03F3&PID_009C		;AVC-1410/1510
+
+[Adaptec.NT.5.1]
+%GameBridge_1400.DeviceDesc%=GameBridgeXP,  USB\VID_03F3&PID_009A	;AVC-1400/1500
+%GameBridge_1410.DeviceDesc%=GameBridgeXP,  USB\VID_03F3&PID_009C	;AVC-1410/1510
+
+[GameBridge]
+Include=    ks.inf, kscaptur.inf, wdmaudio.inf
+Needs=      KS.Registration, KSCAPTUR.Registration, WDMAUDIO.Registration
+AddReg=     GameBridge.AddReg,VID.AddReg
+CopyFiles=  GameBridge.CopyDrivers,DSFilters.CopyFiles
+RegisterDlls=DSFilters.RegDLL    
+
+[GameBridge.NT]
+;Include=    ks.inf, kscaptur.inf, wdmaudio.inf
+;Needs=      KS.Registration.NT, KSCAPTUR.Registration.NT, WDMAUDIO.Registration
+Include=    ks.inf, kscaptur.inf
+Needs=      KS.Registration.NT, KSCAPTUR.Registration.NT
+;AddReg=     GameBridge.AddReg,VID.AddReg
+AddReg=     GameBridge.AddReg,VID.AddReg, GameBridge.RegisterFilterNT
+CopyFiles=  GameBridge.CopyDrivers,DSFilters.CopyFiles
+RegisterDlls=DSFilters.RegDLL    
+
+[GameBridgeXP]
+Include=    ks.inf, kscaptur.inf, wdmaudio.inf
+Needs=      KS.Registration.NT, KSCAPTUR.Registration.NT, WDMAUDIO.Registration
+AddReg=     GameBridge.AddReg,VID.AddReg
+CopyFiles=  GameBridge.CopyDrivers,DSFilters.CopyFiles
+RegisterDlls=DSFilters.RegDLLXP    
+
+[DestinationDirs]
+GameBridge.CopyDrivers=10,system32\drivers
+DSFilters.CopyFiles=11
+
+[GameBridge.CopyDrivers]
+;avcgbfl.sys
+;avcgbdr.sys
+;makoaudb.rom
+;makoaudc.rom
+
+[DSFilters.CopyFiles]
+;gbcpntfy.ax
+;gbtvrate.dll
+;gbclcnvt.ax
+;gbproppg.ax
+;msvcp80.dll
+;msvcr80.dll
+;gbaudmgr.ax
+
+[DSFilters.RegDLL]
+;;11,,gbcpntfy.ax,1
+;;11,,gbtvrate.dll,1
+;11,,gbclcnvt.ax,1
+11,,gbproppg.ax,1
+;11,,gbaudmgr.ax,1
+
+[DSFilters.RegDLLXP]
+;;11,,gbcpntfy.ax,1	;For MCE
+;;11,,gbtvrate.dll,1	;For MCE
+11,,gbclcnvt.ax,1
+11,,gbproppg.ax,1
+11,,gbaudmgr.ax,1
+
+
+[GameBridge.RegisterFilterNT]
+HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,"gbclcnvt.ax",,"rundll32.exe %11%\gbclcnvt.ax, DllRegisterServer"
+HKLM,Software\Microsoft\Windows\CurrentVersion\RunOnce,"gbaudmgr.ax",,"rundll32.exe %11%\gbaudmgr.ax, DllRegisterServer"
+
+[VID.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,avcgbdr.sys
+HKR,,OkToHibernate,3,01
+HKR,,DontSuspendIfStreamsAreRunning,3,01
+
+HKLM,%MediaCategories%\%GUID.PINNAME_ANALOG_AUDIO_IN%,Name,,%Pin.p2AnalogAudioIn%
+HKLM,%MediaCategories%\%GUID.PINNAME_AUDIO_OUT%,Name,,%PinName.AnalogAudioOut%
+
+HKLM,%MediaInterfaces%\{0A7AF963-6805-4f99-B284-29B680975542},,,"Copy Protect Notification Filter"
+HKLM,%MediaInterfaces%\{0A7AF963-6805-4f99-B284-29B680975542},IID,1,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+
+;Audio pin property page
+HKCR,CLSID\%GUID.Audio_Pin_Prop%\InprocServer32,,,gbproppg.ax
+HKCR,CLSID\%GUID.Audio_Pin_Prop%\InprocServer32,ThreadingModel,,Both
+HKLM,%MediaCategories%\%GUID.PinName_Capture%\PropertyPages\%GUID.Audio_Pin_Prop%,,,
+
+;Wave in audio device registration
+HKR,Drivers,SubClasses,,"wave"
+HKR,Drivers\wave\wdmaud.drv, Driver,,wdmaud.drv
+HKR,Drivers\wave\wdmaud.drv,Description,,%AudioFriendlyName%
+
+;Copy protection method enforced by driver
+;HKR,"DriverData","CpMethod",0x00010001, 0x03, 0x00, 0x00, 0x00
+;disable CP
+HKR,"DriverData","CpMethod",0x00010001, 0xFE, 0x00, 0x00, 0x00
+
+; Sony format = 1, Philips format = 0
+HKR,"DriverData","I2SInputFormat",0x00010001, 0x01, 0x00, 0x00, 0x00
+
+;disable raw VBI for retail and use CC pin
+HKR,"DriverData","DisableVBI",0x00010001, 0x01, 0x00, 0x00, 0x00
+
+;------------------------------
+;for audio sample adjust settings
+HKLM,%DriverParameters%,AdjustEnable,0x00010001,0
+HKLM,%DriverParameters%,TimerEnable,0x00010001,0
+HKLM,%DriverParameters%,TimerValue,0x00010001,30
+HKLM,%DriverParameters%,Fullness,0x00010001,5
+HKLM,%DriverParameters%,Top,0x00010001,6
+HKLM,%DriverParameters%,Bottom,0x00010001,4
+;buffer size
+HKLM,%DriverParameters%,BufferNum,0x00010001,8
+HKLM,%DriverParameters%,PacketCnt,0x00010001,160
+HKLM,%DriverParameters%,BufferNumW2k,0x00010001,8
+HKLM,%DriverParameters%,PacketCntW2k,0x00010001,160
+
+
+;---Tuner registry values------
+;Tuner Type - TALF_H800Y Change to 0x15 for TALF-W800Y
+;HKR,"DriverData","TunerType",0x00010001, 0x14, 0x00, 0x00, 0x00
+;XC2028 tuner
+HKR,"DriverData","TunerType",0x00010001, 0x20, 0x00, 0x00, 0x00
+HKR,"DriverData","TunerI2CAddress",0x00010001, 0xC0, 0x00, 0x00, 0x00
+HKR,"DriverData","Tuner2IFAddress",0x00010001, 0x86, 0x00, 0x00, 0x00
+;------------------------------
+
+[GameBridge.AddReg]
+HKR,"DriverData","BoardType",0x00010001, 0x00, 0x00, 0x00, 0x00
+
+;-------------------------------------------------------------------
+; Crossbar AddReg sections
+;
+;---Crossbar registry values---
+;
+; Note: For each pin on the crossbar, specify the following:
+; (1) Pin type
+;     0 - SVIDEO
+;     1 - Tuner
+;     2 - Composite
+;     3 - audio tuner in
+;     4 - audio line in
+; (2) InputMux (required for Falcon 2) - input mux to use for the selected pin
+; (3) RelatedPinIndex
+;-------------------------------------------------------------------
+
+
+;---Crossbar registry values---
+;Pin 0 - Tuner In
+HKR,"DriverData\XBarPin0","PinType",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin0","InputMux",0x00010001, 0x02,0x05,0x00,0x00
+HKR,"DriverData\XBarPin0","RelatedPinIndex",0x00010001, 0x03,0x00,0x00,0x00
+
+;Pin 1 - Composite in
+HKR,"DriverData\XBarPin1","PinType",0x00010001, 0x02,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","InputMux",0x00010001, 0x01,0x00,0x00,0x00
+HKR,"DriverData\XBarPin1","RelatedPinIndex",0x00010001, 0x04,0x00,0x00,0x00
+
+;Pin 2 - S-Video in
+HKR,"DriverData\XBarPin2","PinType",0x00010001, 0x00,0x00,0x00,0x00
+HKR,"DriverData\XBarPin2","InputMux",0x00010001, 0x03,0x04,0x00,0x00
+HKR,"DriverData\XBarPin2","RelatedPinIndex",0x00010001, 0x04,0x00,0x00,0x00
+
+;Pin 3 - Tuner Audio
+HKR,"DriverData\XBarPin3","PinType",0x00010001, 0x03,0x00,0x00,0x00
+HKR,"DriverData\XBarPin3","RelatedPinIndex",0x00010001, 0x00,0x00,0x00,0x00
+
+;Pin 4 - Audio Line in
+HKR,"DriverData\XBarPin4","PinType",0x00010001, 0x04,0x00,0x00,0x00
+HKR,"DriverData\XBarPin4","RelatedPinIndex",0x00010001, 0x01,0x00,0x00,0x00
+
+;Tuner input is the default
+;HKR,"DriverData","VideoInputPin",0x00010001, 0x00,0x00,0x00,0x00
+;
+;Composite input is the default to save tuner power
+HKR,"DriverData","VideoInputPin",0x00010001, 0x01,0x00,0x00,0x00
+
+
+;
+; Interfaces installation
+;
+
+;
+; Video
+;
+
+[GameBridge.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,CXXBAR_Interface,
+AddInterface={a799a800-a46d-11d0-a18c-00a02401dcd4},%TunerReferenceGuid%,CXTUNE_Interface,
+AddInterface=%KSCATEGORY_AUDIO%,%AudioReferenceGuid%,AUD_Interface
+
+[GameBridge.NT.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,CXXBAR_Interface,
+AddInterface={a799a800-a46d-11d0-a18c-00a02401dcd4},%TunerReferenceGuid%,CXTUNE_Interface,
+AddInterface=%KSCATEGORY_AUDIO%,%AudioReferenceGuid%,AUD_Interface
+
+[GameBridgeXP.Interfaces]
+AddInterface={65e8773d-8f56-11d0-a3b9-00a0c9223196},%KsNameFilter%,VID_Interface,
+AddInterface={a799a802-a46d-11d0-a18c-00a02401dcd4},%TVAudioReferenceGuid%,TvAudio_Interface,
+AddInterface={a799a801-a46d-11d0-a18c-00a02401dcd4},%XBARReferenceGUID%,CXXBAR_Interface,
+AddInterface={a799a800-a46d-11d0-a18c-00a02401dcd4},%TunerReferenceGuid%,CXTUNE_Interface,
+AddInterface=%KSCATEGORY_AUDIO%,%AudioReferenceGuid%,AUD_Interface
+
+[VID_Interface]
+AddReg=VID_Interface.AddReg
+AddReg=GameBridge_DESCRIPTION.AddReg
+
+[VID_Interface.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%       ; {17CCA71B-ECD7-11D0-B908-00A0C9223196}
+HKR,,FriendlyName,,%VIDFriendlyName%
+
+[GameBridge_DESCRIPTION.AddReg]
+HKR,,Description,,%GameBridge.DeviceDesc%
+
+[AUD_Interface]
+AddReg=AUD_Interface.AddReg
+
+[AUD_Interface.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%       ; {17CCA71B-ECD7-11D0-B908-00A0C9223196}
+HKR,,FriendlyName,,%AudioFriendlyName%
+
+
+[TvAudio_Interface]
+AddReg=TvAudio_Interface.AddReg
+
+[TvAudio_Interface.AddReg]
+HKR,,CLSID,,%CLSID_TVAudioFilter%
+HKR,,FriendlyName,,%TVAudioFriendlyName%
+
+[CXXBAR_Interface]
+AddReg=CXXBAR_Interface.AddReg
+
+[CXXBAR_Interface.AddReg]
+HKR,,CLSID,,%CLSID_CrossbarFilter%
+HKR,,FriendlyName,,%XBARFriendlyName%
+
+[CXTUNE_Interface]
+AddReg=CXTUNE_Interface.AddReg
+
+[CXTUNE_Interface.AddReg]
+HKR,,CLSID,,%CLSID_CTVTunerFilter%
+HKR,,FriendlyName,,%TunerFriendlyName%
+
+
+;
+; Services installation
+;
+
+[GameBridge.Services]
+AddService = avcgbdr,2,VID.ServiceInstall
+
+[GameBridge.NT.Services]
+AddService = avcgbdr,2,VID.ServiceInstall
+
+[GameBridgeXP.Services]
+AddService = avcgbdr,2,VID.ServiceInstall
+
+
+[VID.ServiceInstall]
+DisplayName   = %GameBridge.DeviceDesc%
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %10%\system32\drivers\avcgbdr.sys
+
+;---------------------------------------------------------------
+;                S t r i n g s
+;---------------------------------------------------------------
+
+[Strings]
+
+;Driver Parameters
+;
+DriverParameters = "System\CurrentControlSet\Services\avcgbdr\Parameters"
+
+;
+; Device Names
+;
+GameBridge.DeviceDesc          = "Adaptec GameBridge AVC-14X0/15X0"
+GameBridge_1400.DeviceDesc     = "Adaptec GameBridge AVC-1400/1500"
+GameBridge_1410.DeviceDesc     = "Adaptec GameBridge AVC-1410/1510"
+
+
+;
+; Friendly Names
+;
+VIDFriendlyName              = "Adaptec GameBridge Video Capture"
+TVAudioFriendlyName          = "Adaptec GameBridge TvAudio"
+TunerFriendlyName            = "Adaptec GameBridge Tuner"
+AudioFriendlyName            = "Adaptec GameBridge Audio Capture"
+XBARFriendlyName             = "Adaptec GameBridge Crossbar"
+
+;
+; Reference GUIDS
+;
+KsNameFilter                 = "{9B365890-165F-11D0-A195-0020AFD156E4}"
+TVAudioReferenceGuid         = "{D8D86791-A570-4a10-8457-08C957E90ECD}"
+XBARReferenceGUID            = "{47B00748-34A2-4000-A892-BA2ABF2E2BE4}"
+TunerReferenceGuid           = "{F7CCD5C2-8766-4401-BF9D-ECF5FE0A07C0}"
+AudioReferenceGuid           = "{5EAF914D-2212-4034-8C4C-02CAFD15D68A}"
+
+
+;
+; Pin Name GUIDS
+;
+GUID.PINNAME_ANALOG_AUDIO_IN = "{3E2D189F-B15C-4447-96F1-BD1D64FB99BA}"
+GUID.PINNAME_AUDIO_OUT       = "{9DA02733-7910-40f2-95DD-0441676C9A9B}"
+
+
+;
+; Pin Names
+;
+PinName.AnalogAudioOut       = "Audio Out"
+Pin.p2AnalogAudioIn          = "Analog Audio In"
+
+;
+; Other Strings
+;
+
+KSCATEGORY_AUDIO             = "{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
+CLSID_TVAudioFilter          = "{71F96462-78F3-11d0-A18C-00A0C9118956}"
+CLSID_CrossbarFilter         = "{71F96460-78F3-11d0-A18C-00A0C9118956}"
+CLSID_CTVTunerFilter         = "{266EEE40-6C63-11cf-8A03-00AA006ECB65}"
+
+GUID.Encoder                 = "{19689BF6-C384-48fd-AD51-90E58C79F70B}"
+GUID.Multiplexer             = "{7A5DE1D3-01A1-452c-B481-4FA2B96271E8}"
+
+Category_Encoders            = "WDM Streaming Encoder Devices"
+Category_Multiplexers        = "WDM Streaming Multiplexer Devices"
+Node.Encoder                 = "Encoder"
+Node.Multiplexer             = "Multiplexer"
+
+Proxy.CLSID                  = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+
+ActiveMovieCategories        = "CLSID\{da4e3da0-d07d-11d0-bd50-00a0c911ce86}\Instance"
+MediaCategories              = "SYSTEM\CurrentControlSet\Control\MediaCategories"
+MediaSets                    = "System\CurrentControlSet\Control\MediaSets"
+MediaInterfaces              = "System\CurrentControlSet\Control\MediaInterfaces"
+
+GUID.Audio_Pin_Prop          = "{05EA6F6B-3B1E-4958-A68D-A37F0B6A2995}"
+GUID.PinName_Capture         = "{FB6C4281-0353-11d1-905F-0000C0CC16BA}"

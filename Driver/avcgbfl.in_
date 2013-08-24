@@ -1,0 +1,116 @@
+
+;======================================================================
+; Name:	avcgbfl.inf
+;
+; Installation for AVC-1410/1400 and AVC-1510/1500 Loader
+;
+; (c) Copyright 2005 Adaptec, Inc
+;
+;======================================================================
+
+[Version]
+CatalogFile=avcgbfl.cat
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%ADPT%
+DriverVer = 10/26/2005,1.1.0.2100
+;======================================================================
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+;======================================================================
+
+[Manufacturer]
+%ADPT%=Adaptec
+
+;======================================================================
+
+[Adaptec]
+%USB\VID_03F3&PID_0099.DeviceDesc%=AVCGBFL, USB\VID_03F3&PID_0099
+%USB\VID_03F3&PID_009B.DeviceDesc%=AVCGBFL, USB\VID_03F3&PID_009b
+;%USB\VID_04B4&PID_8613.DeviceDesc%=AVCGBFL, USB\VID_04b4&PID_8613
+
+;======================================================================
+
+[SourceDisksNames]
+1=%INSTALL_DESCRIPTION%,,
+
+;======================================================================
+
+[SourceDisksFiles]
+avcgbfl.sys = 1
+
+;======================================================================
+
+[DestinationDirs]
+Copy_INF = 10,Inf
+Copy_SYS = 10,System32\drivers
+
+;======================================================================
+;CopyFile Lists
+;======================================================================
+
+[Copy_INF]
+
+
+[Copy_SYS]
+;avcgbfl.sys
+
+;======================================================================
+;AVCGBFL installation for Windows 98SE & Me
+;======================================================================
+
+[AVCGBFL]
+CopyFiles=Copy_INF, Copy_SYS
+AddReg=AVCGBFL.AddReg
+
+[AVCGBFL.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,"avcgbfl.sys"
+
+;======================================================================
+;AVCGBFL installation for Window 2000 & XP
+;======================================================================
+
+[AVCGBFL.NT]
+CopyFiles=Copy_INF, Copy_SYS
+
+;======================================================================
+; AVCGBFL Service Installation for Windows 2000 & Windows XP
+;======================================================================
+
+[AVCGBFL.NT.Services]
+Addservice = avcgbfl, 0x00000002, AVCGBFL_Service_Inst
+
+[AVCGBFL_Service_Inst]
+DisplayName    = %AVCGBFL.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\avcgbfl.sys
+
+;======================================================================
+[Strings]
+;======================================================================
+
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+SERVICEROOT    = "System\CurrentControlSet\Services"
+
+ADPT="Adaptec"
+INSTALL_DESCRIPTION="Adaptec GameBridge AVC-14X0/15X0 Drivers Installation Disk"
+
+USB\VID_03F3&PID_0099.DeviceDesc="Adaptec GameBridge AVC-1400/1500 Loader"
+USB\VID_03F3&PID_009B.DeviceDesc="Adaptec GameBridge AVC-1410/1510 Loader"
+;USB\VID_04B4&PID_8613.DeviceDesc="Cypress EZ-USB FX2LP - EEPROM missing"
+
+AVCGBFL.SvcDesc="Adaptec GameBridge AVC-14X0/15X0 Loader"
+

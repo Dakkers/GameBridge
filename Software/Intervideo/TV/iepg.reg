@@ -1,0 +1,69 @@
+REGEDIT4
+
+;reg for default value
+[HKEY_CLASSES_ROOT\.pl] 
+@= "pl_auto_file"
+
+[HKEY_CLASSES_ROOT\pl_auto_file\shell\open]
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\application/x-perl]
+"Extension"=".pl"
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\.pl]
+@ = "pl_auto_file"
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\pl_auto_file]
+@ = "PL FileType"
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\pl_auto_file\shell\open]
+"EditFlags"=hex:01,00,00,00
+
+[HKEY_CLASSES_ROOT\.tvpi] 
+@= "tvpi_auto_file"
+
+[HKEY_CLASSES_ROOT\tvpi_auto_file\shell\open]
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\.tvpi]
+@ = "tvpi_auto_file"
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\tvpi_auto_file]
+@ = "TVPI FileType"
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\tvpi_auto_file\shell\open]
+"EditFlags"=hex:01,00,00,00
+
+[HKEY_CLASSES_ROOT\.tvvi] 
+@= "tvvi_auto_file"
+
+[HKEY_CLASSES_ROOT\tvvi_auto_file\shell\open]
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\.tvvi]
+@ = "tvvi_auto_file"
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\tvvi_auto_file]
+@ = "TVVI FileType"
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\tvvi_auto_file\shell\open]
+"EditFlags"=hex:01,00,00,00
+
+[HKEY_CLASSES_ROOT\.php3] 
+@= "php3_auto_file"
+
+[HKEY_CLASSES_ROOT\php3_auto_file\shell\open]
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\.php3]
+@ = "php3_auto_file"
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\php3_auto_file]
+@ = "php3 FileType"
+"EditFlags"=hex:00,00,01,00
+
+[HKEY_LOCAL_MACHINE\Software\CLASSES\php3_auto_file\shell\open]
+"EditFlags"=hex:01,00,00,00
